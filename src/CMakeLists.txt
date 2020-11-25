@@ -43,12 +43,13 @@ if("${CMAKE_C_FLAGS}" STREQUAL "")
     set(CMAKE_C_FLAGS " ")
 endif("${CMAKE_C_FLAGS}" STREQUAL "")
 
-string(REGEX REPLACE "-O([123s]|(fast)|( )|($))" " " CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
+string(REGEX REPLACE "-O([123s]|(fast)|( )|($))" " " CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
 
 # OPEX62541 SOURCE CODE BUILD
 # C compiler specific settings
-if (CMAKE_C_COMPILER_ID STREQUAL "Clang")
+if (CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
     # using Clang
+    include_directories(/usr/local/include)
     set(BASE_RELEASE_FLAGS "${CMAKE_C_FLAGS} -std=c99")
     set(BASE_DEBUG_FLAGS "${CMAKE_C_FLAGS}  -std=c99")
 elseif (CMAKE_C_COMPILER_ID STREQUAL "GNU")
@@ -66,7 +67,7 @@ else()
     set(BASE_FLAGS "${BASE_RELEASE_FLAGS}")
 endif()
 
-string(REGEX REPLACE "-O([123s]|(fast)|( )|($))" " " BASE_FLAGS ${BASE_FLAGS})
+string(REGEX REPLACE "-O([123s]|(fast)|( )|($))" " " BASE_FLAGS "${BASE_FLAGS}")
 
 set(BASE_C_FLAGS "-g -Wall -Wextra ${BASE_FLAGS} -lpthread")
 set(BASE_CXX_FLAGS "${BASE_FLAGS}")
@@ -147,7 +148,7 @@ if(NOT MANUAL_BUILD)
         add_executable( ${opex62541_PROGRAM} "${CMAKE_SOURCE_DIR}/${opex62541_PROGRAM}.c" "${CMAKE_SOURCE_DIR}/erlcmd.c" "${CMAKE_SOURCE_DIR}/common.c" )
         target_link_libraries(${opex62541_PROGRAM} ${STATIC_LIBS})
         target_link_libraries(${opex62541_PROGRAM} ${CMAKE_THREAD_LIBS_INIT})
-        target_link_libraries(${opex62541_PROGRAM} ${install_dir}/libopen62541.so)
+        target_link_libraries(${opex62541_PROGRAM} ${install_dir}/libopen62541.dylib)
     endforeach(opex62541_PROGRAM)    
 
 else(NOT MANUAL_BUILD)
@@ -195,7 +196,7 @@ else(NOT MANUAL_BUILD)
         add_dependencies(${opex62541_PROGRAM} open62541)
         target_link_libraries(${opex62541_PROGRAM} ${STATIC_LIBS})
         target_link_libraries(${opex62541_PROGRAM} ${CMAKE_THREAD_LIBS_INIT})
-        target_link_libraries(${opex62541_PROGRAM} ${install_dir}/libopen62541.so)
+        target_link_libraries(${opex62541_PROGRAM} ${install_dir}/libopen62541.dylib)
     endforeach(opex62541_PROGRAM)
 
 endif(NOT MANUAL_BUILD)
