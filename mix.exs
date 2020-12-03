@@ -9,7 +9,7 @@ defmodule Opex62541.MixProject do
       name: "opex62541",
       description: description(),
       #package: package(),
-      source_url: "https://github.com/valiot/opex62541",
+      source_url: "https://github.com/ambritltd/opex62541",
       start_permanent: Mix.env() == :prod,
       compilers: [:cmake] ++ Mix.compilers(),
       docs: [extras: ["README.md"], main: "readme"],
